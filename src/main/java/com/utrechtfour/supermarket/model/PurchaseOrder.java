@@ -5,6 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ public class PurchaseOrder {
     private Supplier supplier;
     @OneToMany(mappedBy = "purchase_order")
     private Set<Product> products = new HashSet<Product>();
+    @NotNull
     private int quantity;
     @NumberFormat(pattern = "000.00")
     private BigDecimal price;
