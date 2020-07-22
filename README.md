@@ -1,5 +1,3 @@
-FORMAT: 1A
-HOST: localhost:8080/
 
 # supermarket
 
