@@ -1,3 +1,4 @@
+
 # supermarket
 
 Supermarket is a REST-API allowing front-end developers to create super-market management applications.
