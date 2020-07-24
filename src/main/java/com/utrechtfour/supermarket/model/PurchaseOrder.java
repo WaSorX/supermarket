@@ -1,5 +1,7 @@
 package com.utrechtfour.supermarket.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.utrechtfour.supermarket.views.RestViews;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.NumberFormat;
@@ -16,21 +18,21 @@ import java.util.Set;
 public class PurchaseOrder {
 
     @Id
-    @Column(nullable = false, insertable = false, updatable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({RestViews.PurchaseOrderView.class})
     private long id;
     @OneToOne
+    @JsonView({RestViews.PurchaseOrderView.class})
     private Supplier supplier;
     @OneToMany(mappedBy = "purchase_order")
-    private Set<Product> products = new HashSet<Product>();
-    @NotNull
-    private int quantity;
-    @NumberFormat(pattern = "000.00")
-    private BigDecimal price;
-    @CreationTimestamp
-    private Date creationTime;
+    @JoinColumn
+    @JsonView({RestViews.PurchaseOrderView.class})
+    private Set<PurchaseOrderItem> poItems;
     @UpdateTimestamp
     private Date updateTime;
+    @CreationTimestamp
+    private Date creationTime;
 
     public long getId() {
         return id;
@@ -48,36 +50,12 @@ public class PurchaseOrder {
         this.supplier = supplier;
     }
 
-    public Set<Product> getProducts() {
-        return products;
+    public Set<PurchaseOrderItem> getPoItems() {
+        return poItems;
     }
 
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Date getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(Date creationTime) {
-        this.creationTime = creationTime;
+    public void setPoItems(Set<PurchaseOrderItem> poItems) {
+        this.poItems = poItems;
     }
 
     public Date getUpdateTime() {
@@ -86,5 +64,13 @@ public class PurchaseOrder {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Date getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 }

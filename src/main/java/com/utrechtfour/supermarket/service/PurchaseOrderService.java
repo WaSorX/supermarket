@@ -1,25 +1,14 @@
 package com.utrechtfour.supermarket.service;
 
-import com.utrechtfour.supermarket.model.PurchaseOrder;
-import com.utrechtfour.supermarket.repository.PurchaseOrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.utrechtfour.supermarket.dto.PurchaseOrderDto;
+import com.utrechtfour.supermarket.dto.PurchaseOrderItemDto;
 
-import java.util.Optional;
+import java.math.BigDecimal;
 
-@Service
-public class PurchaseOrderService {
+public interface PurchaseOrderService {
 
-    @Autowired
-    PurchaseOrderRepository repository;
+    PurchaseOrderDto createPurchaseOrder(PurchaseOrderDto purchaseOrderDto);
 
-    public Optional<PurchaseOrder> getPurchaseOrderById(Long id){
-        return repository.findById(id);
-    }
-
-    public PurchaseOrder createOrUpdatePurchaseOrder(PurchaseOrder purchaseOrder){
-        return repository.save(purchaseOrder);
-    }
-
+    PurchaseOrderDto updatePurchaseOrder(PurchaseOrderItemDto purchaseOrderItemDto, Long id);
 
 }
