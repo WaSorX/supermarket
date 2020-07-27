@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "purchase_order")
+@Entity(name = "purchaseOrder")
+@Table(name = "purchaseOrder")
 public class PurchaseOrder {
 
     @Id
@@ -25,10 +25,10 @@ public class PurchaseOrder {
     @OneToOne
     @JsonView({RestViews.PurchaseOrderView.class})
     private Supplier supplier;
-    @OneToMany(mappedBy = "purchase_order")
-    @JoinColumn
+    @OneToMany(mappedBy = "purchaseOrder",
+                fetch = FetchType.LAZY)
     @JsonView({RestViews.PurchaseOrderView.class})
-    private Set<PurchaseOrderItem> poItems;
+    private Set<PurchaseOrderItem> purchaseOrderItem;
     @UpdateTimestamp
     private Date updateTime;
     @CreationTimestamp
@@ -50,12 +50,12 @@ public class PurchaseOrder {
         this.supplier = supplier;
     }
 
-    public Set<PurchaseOrderItem> getPoItems() {
-        return poItems;
+    public Set<PurchaseOrderItem> getPurchaseOrderItems() {
+        return purchaseOrderItem;
     }
 
-    public void setPoItems(Set<PurchaseOrderItem> poItems) {
-        this.poItems = poItems;
+    public void setPoItems(Set<PurchaseOrderItem> purchaseOrderItems) {
+        this.purchaseOrderItem = purchaseOrderItems;
     }
 
     public Date getUpdateTime() {

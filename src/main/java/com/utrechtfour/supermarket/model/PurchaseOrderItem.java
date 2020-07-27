@@ -8,7 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Entity
+@Entity(name = "purchase_order_item")
 @Table(name = "purchase_order_item")
 public class PurchaseOrderItem {
 
@@ -19,6 +19,8 @@ public class PurchaseOrderItem {
     private Long id;
     @JsonView({RestViews.PurchaseOrderView.class})
     @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
     private Product product;
     @NumberFormat(pattern = "000.00")
     @NotNull
@@ -26,7 +28,7 @@ public class PurchaseOrderItem {
     @NotNull
     private int quantity;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "purchase_order_id")
+    @JoinColumn(name = "purchaseOrder_id")
     private PurchaseOrder purchaseOrder;
 
     public long getId() {

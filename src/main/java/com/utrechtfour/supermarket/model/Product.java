@@ -60,8 +60,9 @@ public class Product {
     @JoinTable(name = "product_suppliers", joinColumns = {@JoinColumn(name = "product_id")}, inverseJoinColumns = {@JoinColumn(name = "supplier_id")})
     @JsonView({RestViews.ProductView.class})
     private Set<Supplier> suppliers = new HashSet<>();
-    @OneToOne (mappedBy = "purchase_order", cascade = CascadeType.ALL)
-    private PurchaseOrder purchaseOrder;
+    @ManyToMany (fetch = FetchType.LAZY, cascade = {CascadeType.ALL, CascadeType.MERGE})
+    @JoinTable(name = "purchaseorderitem_product", joinColumns = {@JoinColumn(name = "product_id")}, inverseJoinColumns = {@JoinColumn(name = "purchaseorderitem_id")})
+    private Set<PurchaseOrderItem> purchaseOrderItem;
 
     public Product() {}
 

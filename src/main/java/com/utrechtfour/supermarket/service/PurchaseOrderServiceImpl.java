@@ -69,7 +69,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
         PurchaseOrderDto purchaseOrderDto = new PurchaseOrderDto();
         purchaseOrderDto.setPurchaseOrderId(purchaseOrderdb.getId());
         Set<PurchaseOrderItemDto> poItemsDtos = new HashSet<>();
-        for (PurchaseOrderItem poItem: purchaseOrderdb.getPoItems()){
+        for (PurchaseOrderItem poItem: purchaseOrderdb.getPurchaseOrderItems()){
             PurchaseOrderItemDto poItemDto = new PurchaseOrderItemDto();
             poItemDto.setPurchaseOrderItemId(poItem.getId());
             poItemDto.setProductId(poItem.getProduct().getId());
@@ -98,7 +98,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
     @Transactional
     public PurchaseOrder addPurchaseOrderItemToOrder(PurchaseOrderItem item, PurchaseOrder order){
-        Set<PurchaseOrderItem> poItems =  order.getPoItems();
+        Set<PurchaseOrderItem> poItems =  order.getPurchaseOrderItems();
         poItems.add(item);
         order.setPoItems(poItems);
         return purchaseOrderRepository.save(order);
