@@ -68,12 +68,14 @@ public class Product {
     @JsonView({RestViews.ProductView.class})
     private BigDecimal price;
 
-
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "product_suppliers", joinColumns = {@JoinColumn(name = "product_id")}, inverseJoinColumns = {@JoinColumn(name = "supplier_id")})
     @JsonView({RestViews.ProductView.class})
     private Set<Supplier> suppliers = new HashSet<>();
+
+    @ManyToMany (fetch = FetchType.LAZY, cascade = {CascadeType.ALL, CascadeType.MERGE})
+    @JoinTable(name = "purchaseorderitem_product", joinColumns = {@JoinColumn(name = "product_id")}, inverseJoinColumns = {@JoinColumn(name = "purchaseorderitem_id")})
+    private Set<PurchaseOrderItem> purchaseOrderItem;
 
     public Product() {}
 
@@ -197,5 +199,13 @@ public class Product {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<PurchaseOrderItem> getPurchaseOrderItem() {
+        return purchaseOrderItem;
+    }
+
+    public void setPurchaseOrderItem(Set<PurchaseOrderItem> purchaseOrderItem) {
+        this.purchaseOrderItem = purchaseOrderItem;
     }
 }
