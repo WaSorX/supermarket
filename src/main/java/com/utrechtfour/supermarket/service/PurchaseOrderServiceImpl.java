@@ -26,36 +26,40 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     PurchaseOrderItemService purchaseOrderItemService;
     @Autowired
     ProductService productService;
+    @Autowired
+    SupplierSevice supplierSevice;
 
     @Transactional
     @Override
     public PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO purchaseOrderDto) {
+
         PurchaseOrder purchaseOrder = new PurchaseOrder();
-        purchaseOrder.setId(purchaseOrderDto.getPurchaseOrderId());
+        purchaseOrder.setSupplier(supplierSevice.getSupplierById(purchaseOrderDto.getSupplierId()).get());
         purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
         Set<PurchaseOrderItem> purchaseOrderItems = new HashSet<>();
-        for (PurchaseOrderItemDTO poItemDto : purchaseOrderDto.getPurchaseOrderItemDtos()){
-
+        for(PurchaseOrderItemDTO poItemDto: purchaseOrderDto.getPurchaseOrderItemDto()) {
             PurchaseOrderItem poItem = new PurchaseOrderItem();
-            poItem.setId(poItemDto.getProductId());
             poItem.setProduct(productService.getProductById(poItemDto.getProductId()).get());
             poItem.setPurchasePrice(poItemDto.getPurchasePrice());
+            System.out.println("quantity dto = " + poItemDto.getQuantity());
             poItem.setQuantity(poItemDto.getQuantity());
-
+            System.out.println("quantity = " + poItem.getQuantity());
+            poItem.setPurchaseOrder(purchaseOrder);
+            poItem = purchaseOrderItemService.createPurchaseOrderItem(poItem);
             purchaseOrderItems.add(poItem);
-            purchaseOrder = addPurchaseOrderItemToOrder(poItem, purchaseOrder);
         }
-        purchaseOrder.setPoItems(purchaseOrderItems);
-        purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
+
+        purchaseOrder = addPurchaseOrderItemsToOrder(purchaseOrderItems, purchaseOrder);
         purchaseOrderDto.setPurchaseOrderId(purchaseOrder.getId());
-        return purchaseOrderDto;
+
+        return purchaseOrderDto.convertToPurchaseOrderDto(purchaseOrder);
     }
 
     @Transactional
     @Override
-    public PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long purchaseOrderId) {
+    public void updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long purchaseOrderId) {
 
-        PurchaseOrder purchaseOrderdb = getPurchaseOrderById(purchaseOrderId).get();
+        PurchaseOrder purchaseOrderdb = purchaseOrderRepository.findById(purchaseOrderId).get();
         Product product  = productService.getProductById(purchaseOrderItemDto.getProductId()).get();
 
         PurchaseOrderItem newItem = new PurchaseOrderItem();
@@ -64,11 +68,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
         newItem.setQuantity(purchaseOrderItemDto.getQuantity());
         newItem.setPurchasePrice(purchaseOrderItemDto.getPurchasePrice());
 
+/*
         purchaseOrderdb = addPurchaseOrderItemToOrder(purchaseOrderItemService.createAndUpdatePurchaseOrderItem(newItem),purchaseOrderdb);
-
         PurchaseOrderDTO purchaseOrderDto = new PurchaseOrderDTO();
         purchaseOrderDto.setPurchaseOrderId(purchaseOrderdb.getId());
-        Set<PurchaseOrderItemDTO> poItemsDtos = new HashSet<>();
+        PurchaseOrderItemDTO poItemsDtos = new HashSet<>();
         for (PurchaseOrderItem poItem: purchaseOrderdb.getPurchaseOrderItems()){
             PurchaseOrderItemDTO poItemDto = new PurchaseOrderItemDTO();
             poItemDto.setPurchaseOrderItemId(poItem.getId());
@@ -79,6 +83,17 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
         }
         purchaseOrderDto.setPurchaseOrderItemDtos(poItemsDtos);
         return purchaseOrderDto;
+  */
+    }
+
+    @Override
+    public PurchaseOrderDTO getPurchaseOrderById(Long id) {
+        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).get();
+        PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
+        purchaseOrderDTO.setPurchaseOrderId(purchaseOrder.getId());
+        purchaseOrderDTO.setSupplierId(purchaseOrder.getSupplier().getId());
+        return purchaseOrderDTO;
+
     }
 
     @Transactional
@@ -97,10 +112,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     }
 
     @Transactional
-    public PurchaseOrder addPurchaseOrderItemToOrder(PurchaseOrderItem item, PurchaseOrder order){
-        Set<PurchaseOrderItem> poItems =  order.getPurchaseOrderItems();
-        poItems.add(item);
-        order.setPoItems(poItems);
+    public PurchaseOrder addPurchaseOrderItemsToOrder(Set<PurchaseOrderItem> items, PurchaseOrder order){
+
+        order.setPoItems(items);
         return purchaseOrderRepository.save(order);
     }
 

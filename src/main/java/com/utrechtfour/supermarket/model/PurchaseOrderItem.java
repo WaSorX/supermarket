@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 public class PurchaseOrderItem {
 
     @Id
-    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
@@ -24,16 +23,16 @@ public class PurchaseOrderItem {
     @NotNull
     private BigDecimal purchasePrice;
     @NotNull
-    private int quantity;
+    private Integer quantity;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "purchaseOrder_id")
     private PurchaseOrder purchaseOrder;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,11 +52,11 @@ public class PurchaseOrderItem {
         this.purchasePrice = purchasePrice;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

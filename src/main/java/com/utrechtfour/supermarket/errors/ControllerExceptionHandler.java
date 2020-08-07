@@ -68,6 +68,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ApiError exceptionHandler(NoSuchElementException e){
         List<String> errors = new ArrayList<>();
+        System.out.println(e.getMessage());
         errors.add(e.getMessage());
         return new ApiError(HttpStatus.BAD_REQUEST,"No such Element Exception",errors);
     }

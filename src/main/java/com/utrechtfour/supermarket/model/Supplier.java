@@ -17,8 +17,8 @@ Supplier {
     private String name;
     @ManyToMany( mappedBy = "suppliers")
     private Set<Product> products;
-    @OneToOne(mappedBy = "supplier", cascade = CascadeType.ALL)
-    private PurchaseOrder purchaseOrder;
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PurchaseOrder> purchaseOrder;
 
 
 
@@ -51,7 +51,13 @@ Supplier {
         this.id = id;
     }
 
+    public Set<PurchaseOrder> getPurchaseOrder() {
+        return purchaseOrder;
+    }
 
+    public void setPurchaseOrder(Set<PurchaseOrder> purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
 }
 
 

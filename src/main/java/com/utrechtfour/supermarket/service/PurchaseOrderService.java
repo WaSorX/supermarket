@@ -8,6 +8,7 @@ public interface PurchaseOrderService {
 
     PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO purchaseOrderDto);
 
-    PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long id);
+    void updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long id);
 
+    PurchaseOrderDTO getPurchaseOrderById(Long id);
 }
