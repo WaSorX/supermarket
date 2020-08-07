@@ -5,16 +5,12 @@ import com.utrechtfour.supermarket.dto.PurchaseOrderItemDTO;
 import com.utrechtfour.supermarket.model.Product;
 import com.utrechtfour.supermarket.model.PurchaseOrder;
 import com.utrechtfour.supermarket.model.PurchaseOrderItem;
-import com.utrechtfour.supermarket.repository.ProductRepository;
 import com.utrechtfour.supermarket.repository.PurchaseOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -31,69 +27,58 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
     @Transactional
     @Override
-    public PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO purchaseOrderDto) {
+    public PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO purchaseOrderDto) throws NoSuchElementException{
 
         PurchaseOrder purchaseOrder = new PurchaseOrder();
         purchaseOrder.setSupplier(supplierSevice.getSupplierById(purchaseOrderDto.getSupplierId()).get());
         purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
         Set<PurchaseOrderItem> purchaseOrderItems = new HashSet<>();
-        for(PurchaseOrderItemDTO poItemDto: purchaseOrderDto.getPurchaseOrderItemDto()) {
-            PurchaseOrderItem poItem = new PurchaseOrderItem();
-            poItem.setProduct(productService.getProductById(poItemDto.getProductId()).get());
-            poItem.setPurchasePrice(poItemDto.getPurchasePrice());
-            System.out.println("quantity dto = " + poItemDto.getQuantity());
-            poItem.setQuantity(poItemDto.getQuantity());
-            System.out.println("quantity = " + poItem.getQuantity());
-            poItem.setPurchaseOrder(purchaseOrder);
-            poItem = purchaseOrderItemService.createPurchaseOrderItem(poItem);
-            purchaseOrderItems.add(poItem);
+        for(PurchaseOrderItemDTO purchaseOrderItemDTO: purchaseOrderDto.getPurchaseOrderItemDto()) {
+           Product product = productService.getProductById(purchaseOrderItemDTO.getProductId()).get();
+            if(!product.getSuppliers().contains(purchaseOrder.getSupplier())) {
+                throw new NoSuchElementException("supplier with id = " + purchaseOrder.getSupplier().getId() + " does not have product " + product.getId());
+            } else {
+                PurchaseOrderItem poItem = new PurchaseOrderItem();
+                poItem.setProduct(productService.getProductById(purchaseOrderItemDTO.getProductId()).get());
+                poItem.setPurchasePrice(purchaseOrderItemDTO.getPurchasePrice());
+                poItem.setQuantity(purchaseOrderItemDTO.getQuantity());
+                poItem.setPurchaseOrder(purchaseOrder);
+                poItem = purchaseOrderItemService.createPurchaseOrderItem(poItem);
+                purchaseOrderItems.add(poItem);
+            }
         }
 
         purchaseOrder = addPurchaseOrderItemsToOrder(purchaseOrderItems, purchaseOrder);
         purchaseOrderDto.setPurchaseOrderId(purchaseOrder.getId());
 
-        return purchaseOrderDto.convertToPurchaseOrderDto(purchaseOrder);
+        return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrder);
     }
 
     @Transactional
     @Override
-    public void updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long purchaseOrderId) {
+    public PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long purchaseOrderId) throws NoSuchElementException {
 
         PurchaseOrder purchaseOrderdb = purchaseOrderRepository.findById(purchaseOrderId).get();
         Product product  = productService.getProductById(purchaseOrderItemDto.getProductId()).get();
+        if(!product.getSuppliers().contains(purchaseOrderdb.getSupplier())){
+            throw new NoSuchElementException("supplier with id = " + purchaseOrderdb.getSupplier().getId() + " does not have product " + product.getId());
+        } else {
 
-        PurchaseOrderItem newItem = new PurchaseOrderItem();
-        newItem.setProduct(product);
-        newItem.setPurchaseOrder(purchaseOrderdb);
-        newItem.setQuantity(purchaseOrderItemDto.getQuantity());
-        newItem.setPurchasePrice(purchaseOrderItemDto.getPurchasePrice());
-
-/*
-        purchaseOrderdb = addPurchaseOrderItemToOrder(purchaseOrderItemService.createAndUpdatePurchaseOrderItem(newItem),purchaseOrderdb);
-        PurchaseOrderDTO purchaseOrderDto = new PurchaseOrderDTO();
-        purchaseOrderDto.setPurchaseOrderId(purchaseOrderdb.getId());
-        PurchaseOrderItemDTO poItemsDtos = new HashSet<>();
-        for (PurchaseOrderItem poItem: purchaseOrderdb.getPurchaseOrderItems()){
-            PurchaseOrderItemDTO poItemDto = new PurchaseOrderItemDTO();
-            poItemDto.setPurchaseOrderItemId(poItem.getId());
-            poItemDto.setProductId(poItem.getProduct().getId());
-            poItemDto.setPurchasePrice(poItem.getPurchasePrice());
-            poItemDto.setQuantity(poItem.getQuantity());
-            poItemsDtos.add(poItemDto);
+            PurchaseOrderItem newItem = new PurchaseOrderItem();
+            newItem.setProduct(product);
+            newItem.setPurchaseOrder(purchaseOrderdb);
+            newItem.setQuantity(purchaseOrderItemDto.getQuantity());
+            newItem.setPurchasePrice(purchaseOrderItemDto.getPurchasePrice());
+            newItem = purchaseOrderItemService.createAndUpdatePurchaseOrderItem(newItem);
+            purchaseOrderdb = addPurchaseOrderItemsToOrder(newItem, purchaseOrderdb);
         }
-        purchaseOrderDto.setPurchaseOrderItemDtos(poItemsDtos);
-        return purchaseOrderDto;
-  */
+        return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrderdb);
     }
 
     @Override
     public PurchaseOrderDTO getPurchaseOrderById(Long id) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).get();
-        PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
-        purchaseOrderDTO.setPurchaseOrderId(purchaseOrder.getId());
-        purchaseOrderDTO.setSupplierId(purchaseOrder.getSupplier().getId());
-        return purchaseOrderDTO;
-
+        return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrder);
     }
 
     @Transactional
@@ -115,6 +100,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     public PurchaseOrder addPurchaseOrderItemsToOrder(Set<PurchaseOrderItem> items, PurchaseOrder order){
 
         order.setPoItems(items);
+        return purchaseOrderRepository.save(order);
+    }
+
+    public PurchaseOrder addPurchaseOrderItemsToOrder(PurchaseOrderItem item, PurchaseOrder order){
+        order.getPurchaseOrderItems().add(item);
         return purchaseOrderRepository.save(order);
     }
 

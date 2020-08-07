@@ -22,6 +22,7 @@ public class PurchaseOrderItemDTO {
         @JsonProperty("product_id")
         private Long productId;
         @JsonProperty("quantity")
+        @Min(1)
         @JsonView({RestViews.PurchaseOrderView.class})
         private Integer quantity;
         @JsonView({RestViews.PurchaseOrderView.class})

@@ -44,7 +44,7 @@ public class PurchaseOrderDTO {
         this.purchaseOrderItemDto = purchaseOrderItemDtos;
     }
 
-    public PurchaseOrderDTO convertToPurchaseOrderDto(PurchaseOrder purchaseOrder){
+    public static PurchaseOrderDTO convertToPurchaseOrderDto(PurchaseOrder purchaseOrder){
         PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
         purchaseOrderDTO.setPurchaseOrderId(purchaseOrder.getId());
         purchaseOrderDTO.setSupplierId(purchaseOrder.getSupplier().getId());

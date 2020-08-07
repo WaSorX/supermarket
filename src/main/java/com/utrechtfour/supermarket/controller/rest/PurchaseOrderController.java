@@ -32,6 +32,26 @@ public class PurchaseOrderController {
         }
     }
 
+    @GetMapping("/purchaseOrder/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @JsonView({RestViews.PurchaseOrderView.class})
+    public ResponseEntity getProductById (@PathVariable Long id, HttpServletResponse response){
+
+        if (purchaseOrderService.getPurchaseOrderById(id) != null){
+            return new ResponseEntity(purchaseOrderService.getPurchaseOrderById(id), HttpStatus.OK);
+        }
+        else
+            throw new ValidationException("Cannot find Product with an id of " + id);
+    }
+
+
+    @PutMapping("/purchaseOrder/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @JsonView({RestViews.PurchaseOrderView.class})
+    public ResponseEntity<PurchaseOrderDTO> updatePurchaseOrder(@RequestBody PurchaseOrderItemDTO purchaseOrderItemDto, @PathVariable Long id){
+        return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.updatePurchaseOrder(purchaseOrderItemDto, id),HttpStatus.OK);
+    }
+
     @GetMapping("/purchaseOrderDemo")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PurchaseOrderDTO> createPurchaseOrderDemo(){
@@ -46,28 +66,7 @@ public class PurchaseOrderController {
         purchaseOrderItemDTOS.add(purchaseOrderItemDTO);
         purchaseOrderDTO.setPurchaseOrderItemDto(purchaseOrderItemDTOS);
 
-        return new ResponseEntity(purchaseOrderService.createPurchaseOrder(purchaseOrderDTO),HttpStatus.OK);
+        return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.createPurchaseOrder(purchaseOrderDTO),HttpStatus.OK);
     }
 
-    @GetMapping("/purchaseOrder/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    @JsonView({RestViews.ProductView.class})
-    public ResponseEntity getProductById (@PathVariable Long id, HttpServletResponse response){
-
-        if (purchaseOrderService.getPurchaseOrderById(id) != null){
-            return new ResponseEntity(purchaseOrderService.getPurchaseOrderById(id), HttpStatus.OK);
-        }
-        else
-            throw new ValidationException("Cannot find Product with an id of " + id);
-    }
-
-
-/*
-    @PutMapping("/purchaseOrder/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public PurchaseOrderDTO updatePurchaseOrder(@RequestBody PurchaseOrderItemDTO purchaseOrderItemDto, @PathVariable Long id){
-        return purchaseOrderService.updatePurchaseOrder(purchaseOrderItemDto, id);
-    }
-
- */
 }

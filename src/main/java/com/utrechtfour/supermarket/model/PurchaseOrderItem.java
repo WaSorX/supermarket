@@ -5,6 +5,7 @@ import com.utrechtfour.supermarket.views.RestViews;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -22,6 +23,7 @@ public class PurchaseOrderItem {
     @NumberFormat(pattern = "000.00")
     @NotNull
     private BigDecimal purchasePrice;
+    @Min(1)
     @NotNull
     private Integer quantity;
     @ManyToOne(cascade = CascadeType.ALL)
