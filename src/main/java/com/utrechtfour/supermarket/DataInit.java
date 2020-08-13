@@ -15,6 +15,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.util.HashSet;
 
 @Component
@@ -37,23 +38,6 @@ public class DataInit implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception{
-/*
-        Category fruits = new Category();
-        fruits.setName("Fruits");
-        fruits.setId(Long.valueOf(1));
-        Category notFruits = new Category();
-        notFruits.setName("Not Fruits");
-        notFruits.setId(Long.valueOf(2));
 
-        categoryRepository.save(fruits);
-        categoryRepository.save(notFruits);
-
-        Brand brand = new Brand();
-        brand.setName("Chiquita");
-        brandRepository.save(brand);
-
-        Supplier supplier = new Supplier();
-        supplier.setName("Mitsos");
-        supplierRepository.save(supplier);*/
     }
 }
