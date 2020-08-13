@@ -256,4 +256,86 @@ object any containing the following properties. Omitted properties will not be c
                     }
                 ]
             }
+            
+## Category [/gategory/{id}]
+
+### Get a Category [GET]
+
++ Response 200 (application/json)
+    
+        {
+            "id": 15,
+            "name": "Soups"
+        }
+        
+## Category Creation [/product/]
+
+### Create a New Category [POST]
+
+You may create your own category using this action. It takes a JSON
+object containing the following properties.
+#####Omitted properties will be converted to null if not mandatory.  
+
++ name (string - mandatory) - The catefory's name.
+
++ Request (application/json)
+
+            {
+                "name": "Soups"
+            }
+        
++ Response (body)
+
+        {
+            "id": 15,
+            "name": "Soups"
+        }
+
+
+
+
+## Category Change [/category/{id}]
+
+### Update an Existing Category [PUT]
+
+You may update an existing category using this action. It takes a JSON
+object containing the following properties.
+####Omitted properties will be converted to null if not mandatory.  
+
++ name (string - mandatory) - The product's name.
+
+   + Request (application/json)
+
+            {
+             "name": "Soups",
+            }
+
+   + Response 201 (body)
+
+            {
+                "id": 15,
+                "name": "Soups"
+            }
+            
+
+
+### Patch an Existing Category [PATCH]
+
+You may patch an existing category by using this action. It takes a JSON
+object any containing the following properties. Omitted properties will not be changed. 
+  
++ name (string) - The category's name.
+
+   + Request (application/json)
+
+            {
+                "name": "Soups",
+            }
+
+   + Response 201 (body)
+
+            {
+                "id": 15,
+                "name": "Soups"
+            }
 
