@@ -36,7 +36,7 @@ public class CategoryController {
 
     @Transactional
     @PostMapping("/category")
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.CategoryView.class})
     public ResponseEntity<Category> createCategory (@RequestBody @Valid Category category) throws Throwable {
 
         if (category.getId() != null){
@@ -47,7 +47,7 @@ public class CategoryController {
 
     @PatchMapping("/category/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.CategoryView.class})
     public ResponseEntity<Category> updateCategory(@RequestBody Map<String,Object> updates, @PathVariable Long id) throws ValidationException {
 
         try {
@@ -59,7 +59,7 @@ public class CategoryController {
 
     @PutMapping("/category/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.CategoryView.class})
     public ResponseEntity<Category> updateCategory(@RequestBody @Valid Category category, @PathVariable Long id){
 
         return new ResponseEntity(categoryService.updateCategory(category, id),HttpStatus.OK);

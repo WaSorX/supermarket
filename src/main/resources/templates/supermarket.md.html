@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="utf-8">
     <title>Supermarket</title>
@@ -262,7 +262,7 @@ object any containing the following properties. Omitted properties will not be c
 </code></pre>
 </li>
 </ul>
-<h2 class="code-line" data-line-start=259 data-line-end=260><a id="Category_gategoryid_259"></a>Category [/gategory/{id}]</h2>
+<h2 class="code-line" data-line-start=259 data-line-end=260><a id="Category_categoryid_259"></a>Category [/category/{id}]</h2>
 <h3 class="code-line" data-line-start=261 data-line-end=262><a id="Get_a_Category_GET_261"></a>Get a Category [GET]</h3>
 <ul>
 <li class="has-line-data" data-line-start="263" data-line-end="270">
@@ -274,14 +274,14 @@ object any containing the following properties. Omitted properties will not be c
 </code></pre>
 </li>
 </ul>
-<h2 class="code-line" data-line-start=270 data-line-end=271><a id="Category_Creation_product_270"></a>Category Creation [/product/]</h2>
+<h2 class="code-line" data-line-start=270 data-line-end=271><a id="Category_Creation_category_270"></a>Category Creation [/category/]</h2>
 <h3 class="code-line" data-line-start=272 data-line-end=273><a id="Create_a_New_Category_POST_272"></a>Create a New Category [POST]</h3>
 <p class="has-line-data" data-line-start="274" data-line-end="277">You may create your own category using this action. It takes a JSON<br>
 object containing the following properties.<br>
 #####Omitted properties will be converted to null if not mandatory.</p>
 <ul>
 <li class="has-line-data" data-line-start="278" data-line-end="280">
-<p class="has-line-data" data-line-start="278" data-line-end="279">name (string - mandatory) - The catefory’s name.</p>
+<p class="has-line-data" data-line-start="278" data-line-end="279">name (string - mandatory) - The category’s name.</p>
 </li>
 <li class="has-line-data" data-line-start="280" data-line-end="286">
 <p class="has-line-data" data-line-start="280" data-line-end="281">Request (application/json)</p>
@@ -345,6 +345,95 @@ object any containing the following properties. Omitted properties will not be c
 <pre><code>   {
        &quot;id&quot;: 15,
        &quot;name&quot;: &quot;Soups&quot;
+   }
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h2 class="code-line" data-line-start=341 data-line-end=342><a id="Supplier_supplierid_341"></a>Supplier [/supplier/{id}]</h2>
+<h3 class="code-line" data-line-start=343 data-line-end=344><a id="Get_a_Supplier_GET_343"></a>Get a Supplier [GET]</h3>
+<ul>
+<li class="has-line-data" data-line-start="345" data-line-end="352">
+<p class="has-line-data" data-line-start="345" data-line-end="346">Response 200 (application/json)</p>
+<pre><code>  {
+      &quot;id&quot;: 15,
+      &quot;name&quot;: &quot;Jason Statham&quot;
+  }
+</code></pre>
+</li>
+</ul>
+<h2 class="code-line" data-line-start=352 data-line-end=353><a id="Supplier_Creation_supplier_352"></a>Supplier Creation [/supplier/]</h2>
+<h3 class="code-line" data-line-start=354 data-line-end=355><a id="Create_a_New_Supplier_POST_354"></a>Create a New Supplier [POST]</h3>
+<p class="has-line-data" data-line-start="356" data-line-end="359">You may create your own supplier using this action. It takes a JSON<br>
+object containing the following properties.<br>
+#####Omitted properties will be converted to null if not mandatory.</p>
+<ul>
+<li class="has-line-data" data-line-start="360" data-line-end="362">
+<p class="has-line-data" data-line-start="360" data-line-end="361">name (string - mandatory) - The supplier’s name.</p>
+</li>
+<li class="has-line-data" data-line-start="362" data-line-end="368">
+<p class="has-line-data" data-line-start="362" data-line-end="363">Request (application/json)</p>
+<pre><code>      {
+          &quot;name&quot;: &quot;Jason Statham&quot;
+      }
+</code></pre>
+</li>
+<li class="has-line-data" data-line-start="368" data-line-end="378">
+<p class="has-line-data" data-line-start="368" data-line-end="369">Response (body)</p>
+<pre><code>  {
+      &quot;id&quot;: 15,
+      &quot;name&quot;: &quot;Jason Statham&quot;
+  }
+</code></pre>
+</li>
+</ul>
+<h2 class="code-line" data-line-start=378 data-line-end=379><a id="Supplier_Change_supplierid_378"></a>Supplier Change [/supplier/{id}]</h2>
+<h3 class="code-line" data-line-start=380 data-line-end=381><a id="Update_an_Existing_Supplier_PUT_380"></a>Update an Existing Supplier [PUT]</h3>
+<p class="has-line-data" data-line-start="382" data-line-end="385">You may update an existing supplier using this action. It takes a JSON<br>
+object containing the following properties.<br>
+####Omitted properties will be converted to null if not mandatory.</p>
+<ul>
+<li class="has-line-data" data-line-start="386" data-line-end="403">
+<p class="has-line-data" data-line-start="386" data-line-end="387">name (string - mandatory) - The supplier’s name.</p>
+<ul>
+<li class="has-line-data" data-line-start="388" data-line-end="394">
+<p class="has-line-data" data-line-start="388" data-line-end="389">Request (application/json)</p>
+<pre><code>   {
+    &quot;name&quot;: &quot;Jason Statham&quot;
+   }
+</code></pre>
+</li>
+<li class="has-line-data" data-line-start="394" data-line-end="403">
+<p class="has-line-data" data-line-start="394" data-line-end="395">Response 201 (body)</p>
+<pre><code>   {
+       &quot;id&quot;: 15,
+       &quot;name&quot;: &quot;Jason Statham&quot;
+   }
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 class="code-line" data-line-start=403 data-line-end=404><a id="Patch_an_Existing_Supplier_PATCH_403"></a>Patch an Existing Supplier [PATCH]</h3>
+<p class="has-line-data" data-line-start="405" data-line-end="407">You may patch an existing supplier by using this action. It takes a JSON<br>
+object any containing the following properties. Omitted properties will not be changed.</p>
+<ul>
+<li class="has-line-data" data-line-start="408" data-line-end="425">
+<p class="has-line-data" data-line-start="408" data-line-end="409">name (string) - The supplier’s name.</p>
+<ul>
+<li class="has-line-data" data-line-start="410" data-line-end="416">
+<p class="has-line-data" data-line-start="410" data-line-end="411">Request (application/json)</p>
+<pre><code>   {
+       &quot;name&quot;: &quot;Jason Statham&quot;
+   }
+</code></pre>
+</li>
+<li class="has-line-data" data-line-start="416" data-line-end="425">
+<p class="has-line-data" data-line-start="416" data-line-end="417">Response 201 (body)</p>
+<pre><code>   {
+       &quot;id&quot;: 15,
+       &quot;name&quot;: &quot;Jason Statham&quot;
    }
 </code></pre>
 </li>

@@ -14,7 +14,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class, RestViews.CategoryView.class})
     private Long id;
 
     @JsonView({RestViews.ProductView.class,RestViews.CategoryView.class})
