@@ -356,7 +356,7 @@ object any containing the following properties. Omitted properties will not be c
 
 You may create your own supplier using this action. It takes a JSON
 object containing the following properties.
-#####Omitted properties will be converted to null if not mandatory.  
+#######Omitted properties will be converted to null if not mandatory.  
 
 + name (string - mandatory) - The supplier's name.
 
@@ -382,7 +382,7 @@ object containing the following properties.
 
 You may update an existing supplier using this action. It takes a JSON
 object containing the following properties.
-####Omitted properties will be converted to null if not mandatory.  
+###Omitted properties will be converted to null if not mandatory.  
 
 + name (string - mandatory) - The supplier's name.
 
@@ -404,7 +404,7 @@ object containing the following properties.
 ### Patch an Existing Supplier [PATCH]
 
 You may patch an existing supplier by using this action. It takes a JSON
-object any containing the following properties. Omitted properties will not be changed. 
+object containing the following properties. Omitted properties will not be changed. 
   
 + name (string) - The supplier's name.
 
