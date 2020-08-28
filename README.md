@@ -256,6 +256,172 @@ object any containing the following properties. Omitted properties will not be c
                     }
                 ]
             }
+            
+## Category [/category/{id}]
+
+### Get a Category [GET]
+
++ Response 200 (application/json)
+    
+        {
+            "id": 15,
+            "name": "Soups"
+        }
+        
+## Category Creation [/category/]
+
+### Create a New Category [POST]
+
+You may create your own category using this action. It takes a JSON
+object containing the following properties.
+#####Omitted properties will be converted to null if not mandatory.  
+
++ name (string - mandatory) - The category's name.
+
++ Request (application/json)
+
+            {
+                "name": "Soups"
+            }
+        
++ Response (body)
+
+        {
+            "id": 15,
+            "name": "Soups"
+        }
+
+
+
+
+## Category Change [/category/{id}]
+
+### Update an Existing Category [PUT]
+
+You may update an existing category using this action. It takes a JSON
+object containing the following properties.
+####Omitted properties will be converted to null if not mandatory.  
+
++ name (string - mandatory) - The product's name.
+
+   + Request (application/json)
+
+            {
+             "name": "Soups",
+            }
+
+   + Response 201 (body)
+
+            {
+                "id": 15,
+                "name": "Soups"
+            }
+            
+
+
+### Patch an Existing Category [PATCH]
+
+You may patch an existing category by using this action. It takes a JSON
+object any containing the following properties. Omitted properties will not be changed. 
+  
++ name (string) - The category's name.
+
+   + Request (application/json)
+
+            {
+                "name": "Soups",
+            }
+
+   + Response 201 (body)
+
+            {
+                "id": 15,
+                "name": "Soups"
+            }
+
+## Supplier [/supplier/{id}]
+
+### Get a Supplier [GET]
+
++ Response 200 (application/json)
+    
+        {
+            "id": 15,
+            "name": "Jason Statham"
+        }
+        
+## Supplier Creation [/supplier/]
+
+### Create a New Supplier [POST]
+
+You may create your own supplier using this action. It takes a JSON
+object containing the following properties.
+#######Omitted properties will be converted to null if not mandatory.  
+
++ name (string - mandatory) - The supplier's name.
+
++ Request (application/json)
+
+            {
+                "name": "Jason Statham"
+            }
+        
++ Response (body)
+
+        {
+            "id": 15,
+            "name": "Jason Statham"
+        }
+
+
+
+
+## Supplier Change [/supplier/{id}]
+
+### Update an Existing Supplier [PUT]
+
+You may update an existing supplier using this action. It takes a JSON
+object containing the following properties.
+###Omitted properties will be converted to null if not mandatory.  
+
++ name (string - mandatory) - The supplier's name.
+
+   + Request (application/json)
+
+            {
+             "name": "Jason Statham",
+            }
+
+   + Response 201 (body)
+
+            {
+                "id": 15,
+                "name": "Jason Statham"
+            }
+            
+
+
+### Patch an Existing Supplier [PATCH]
+
+You may patch an existing supplier by using this action. It takes a JSON
+object containing the following properties. Omitted properties will not be changed. 
+  
++ name (string) - The supplier's name.
+
+   + Request (application/json)
+
+            {
+                "name": "Soups",
+            }
+
+   + Response 201 (body)
+
+            {
+                "id": 15,
+                "name": "Soups"
+            }
+
+
 
 ## Purchase Order [/purchaseOrder/{id}]
 

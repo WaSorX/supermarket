@@ -5,6 +5,7 @@ import com.utrechtfour.supermarket.views.RestViews;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,11 +14,12 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class, RestViews.CategoryView.class})
     private Long id;
 
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class,RestViews.CategoryView.class})
     @NotNull
+    @Size(min = 0, max = 50)
     private String name;
 
     @OneToMany(mappedBy = "category")

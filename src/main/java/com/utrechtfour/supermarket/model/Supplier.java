@@ -12,8 +12,9 @@ Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, insertable = false)
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class, RestViews.SupplierView.class})
     private Long id;
+    @JsonView(RestViews.SupplierView.class)
     private String name;
     @ManyToMany( mappedBy = "suppliers")
     private Set<Product> products;
@@ -21,8 +22,6 @@ Supplier {
     private Set<PurchaseOrder> purchaseOrder;
 
 
-
-    @JsonView({RestViews.ProductView.class})
     public String getName() {
         return name;
     }
