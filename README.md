@@ -423,3 +423,159 @@ object containing the following properties. Omitted properties will not be chang
 
 
 
+## Purchase Order [/purchaseOrder/{id}]
+
+### Get a purchase order [GET]
+
++ Response 200 (application/json)
+    
+       {
+                   "id": 2,
+                   "supplier_id": 1,
+                   "purchase_order_item": [
+                       {
+                           "id": 1,
+                           "product_id": 1,
+                           "quantity": 100,
+                           "price": 1.00
+                       },
+                       {
+                           "id": 2,
+                           "product_id": 2,
+                           "quantity": 200,
+                           "price": 3.00
+                       }
+                   ]
+               }
+        
+
+## Purchase Order Creation [/purchaseOrder/]
+
+### Create a New Purchase Order [POST]
+
+You may create a new purchase order using this action. It takes a JSON
+object containing the following properties.
+#####Omitted properties will be converted to null if not mandatory.  
+
++ supplier_id (number - mandatory) - The id for the supplier.
++ purchase_order_item (JSON object - mandatory) - The purchase order item to be created.
+It consists of a product id (number - mandatory), quantity (number), price (number). 
+
+
++ Request (application/json)
+
+            {"supplier_id":1,
+                "purchase_order_item":[
+                    {
+                    "product_id":1,
+                    "quantity": 100,
+                    "price": 1.00
+                }
+                ]
+            }
+        
++ Response (body)
+
+        {
+            "id": 2,
+            "supplier_id": 1,
+            "purchase_order_item": [
+                {
+                    "id": 1,
+                    "product_id": 1,
+                    "quantity": 100,
+                    "price": 1.00
+                }
+            ]
+        }
+
+## Purchase Order Change [/purchaseOrder/]
+
+### Update an existing Purchase Order [PUT]
+
+You may add a purchase order item to an existing purchase order using this action. It takes a JSON
+object containing the following properties.
+
++ supplier_id (number - mandatory) - The id for the supplier.
++ purchase_order_item (JSON object - mandatory) - The purchase order item to be created.
+It consists of a product id (number - mandatory), quantity (number), price (number). 
+
+
++ Request (application/json)
+
+            {"supplier_id":1,
+                "purchase_order_item":[
+                {
+                    "product_id":2,
+                    "quantity": 200,
+                    "price": 3.00
+                }
+                ]
+            }
+        
++ Response (body)
+
+        {
+            "id": 2,
+            "supplier_id": 1,
+            "purchase_order_item": [
+                {
+                    "id": 1,
+                    "product_id": 1,
+                    "quantity": 100,
+                    "price": 1.00
+                },
+                {
+                    "id": 2,
+                    "product_id": 2,
+                    "quantity": 200,
+                    "price": 3.00
+                }
+            ]
+        }
+
+
+## Purchase Order Change [/purchaseOrder/{id}]
+
+### Update an existing Purchase Order [PUT]
+
+You may add a purchase order item to an existing purchase order using this action. It takes a JSON
+object containing the following properties.
+
++ product_id (number - mandatory) - The product's id.
++ quantity (number) - The quantity for this purchase order item.
++ price (number) - The purchase price of the purchase order item.
+
+
+   + Request (application/json)
+
+           {
+                "product_id":2,
+                "quantity":200,
+                "price": 3.00
+               
+           }
+
+   + Response 201 (body)
+
+            {
+                "id": 2,
+                "supplier_id": 1,
+                "purchase_order_item": [
+                {
+                    "id": 1,
+                    "product_id": 1,
+                    "quantity": 100,
+                    "price": 1.00
+                },
+                {
+                    "id": 2,
+                    "product_id": 2,
+                    "quantity": 200,
+                    "price": 3.00
+                }
+                ]
+            }
+            
+
+
