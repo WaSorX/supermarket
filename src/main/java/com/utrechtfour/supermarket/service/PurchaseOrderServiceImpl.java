@@ -54,6 +54,28 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
         return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrder);
     }
 
+
+    @Transactional
+    public PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderDTO purchaseOrderDTO) throws NoSuchElementException{
+        PurchaseOrder purchaseOrderdb = purchaseOrderRepository.findById(purchaseOrderDTO.getPurchaseOrderId()).get();
+        for (PurchaseOrderItemDTO purchaseOrderItemDTO: purchaseOrderDTO.getPurchaseOrderItemDto()){
+            Product product = productService.getProductById(purchaseOrderItemDTO.getProductId()).get();
+            if(!product.getSuppliers().contains(purchaseOrderdb.getSupplier())){
+                throw new NoSuchElementException("supplier with id = " + purchaseOrderdb.getSupplier().getId() + " does not have product " + product.getId());
+            } else {
+                PurchaseOrderItem newItem = new PurchaseOrderItem();
+                newItem.setProduct(product);
+                newItem.setPurchaseOrder(purchaseOrderdb);
+                newItem.setQuantity(purchaseOrderItemDTO.getQuantity());
+                newItem.setPurchasePrice(purchaseOrderItemDTO.getPurchasePrice());
+                newItem = purchaseOrderItemService.createAndUpdatePurchaseOrderItem(newItem);
+                purchaseOrderdb = addPurchaseOrderItemsToOrder(newItem, purchaseOrderdb);
+            }
+
+        }
+        return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrderdb);
+    }
+
     @Transactional
     @Override
     public PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long purchaseOrderId) throws NoSuchElementException {
