@@ -15,14 +15,15 @@ public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, insertable = false, name = "id")
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class, RestViews.BrandView.class})
     private Long id;
 
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class,RestViews.BrandView.class})
     @NotNull
     private String name;
 
     @OneToMany(mappedBy = "brand")
+    @JsonView({RestViews.BrandView.class})
     private Set<Product> products = new HashSet<Product>();
 
 

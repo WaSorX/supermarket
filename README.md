@@ -338,6 +338,88 @@ object any containing the following properties. Omitted properties will not be c
                 "id": 15,
                 "name": "Soups"
             }
+            
+## Brand [/brand/{id}]
+
+### Get a Brand [GET]
+
++ Response 200 (application/json)
+    
+        {
+            "id": 15,
+            "name": "Chiquita"
+        }
+        
+## Brand Creation [/brand/]
+
+### Create a New Brand [POST]
+
+You may create your own brand using this action. It takes a JSON
+object containing the following properties.
+#####Omitted properties will be converted to null if not mandatory.  
+
++ name (string - mandatory) - The brand's name.
+
++ Request (application/json)
+
+            {
+                "name": "Chiquita"
+            }
+        
++ Response (body)
+
+        {
+            "id": 15,
+            "name": "Chiquita"
+        }
+
+
+
+
+## Brand Change [/brand/{id}]
+
+### Update an Existing Brand [PUT]
+
+You may update an existing brand using this action. It takes a JSON
+object containing the following properties.
+####Omitted properties will be converted to null if not mandatory.  
+
++ name (string - mandatory) - The brand's name.
+
+   + Request (application/json)
+
+            {
+             "name": "Chiquita",
+            }
+
+   + Response 201 (body)
+
+            {
+                "id": 15,
+                "name": "Chiquita"
+            }
+            
+
+
+### Patch an Existing Brand [PATCH]
+
+You may patch an existing brand by using this action. It takes a JSON
+object any containing the following properties. Omitted properties will not be changed. 
+  
++ name (string) - The brand's name.
+
+   + Request (application/json)
+
+            {
+                "name": "Chiquita",
+            }
+
+   + Response 201 (body)
+
+            {
+                "id": 15,
+                "name": "Soups"
+            }
 
 ## Supplier [/supplier/{id}]
 

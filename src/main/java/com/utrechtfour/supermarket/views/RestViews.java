@@ -6,4 +6,5 @@ public class RestViews {
     public static class PurchaseOrderView{};
     public static class CategoryView{};
     public static class SupplierView{};
+    public static class BrandView{};
 }
