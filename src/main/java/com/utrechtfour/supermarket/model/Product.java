@@ -22,16 +22,16 @@ public class Product {
     @Id
     @Column(nullable = false, insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class,RestViews.BrandView.class})
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class,RestViews.BrandView.class})
     @Size(min = 13, max = 13)
     private String barcode;
 
     @NotBlank
-    @JsonView({RestViews.ProductView.class})
+    @JsonView({RestViews.ProductView.class,RestViews.BrandView.class})
     private String name;
 
     @JsonView({RestViews.ProductView.class})
