@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <form id="password-form" th:fragment="loginform">
+        <label for="email">First name:</label><br>
+        <input type="email" id="email" v-model="email"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" v-model="password"><br><br>
+        <label for="password-confirmation">Confirm password:</label><br>
+        <input type="password" id="password-confirmation" v-model="passwordConfirm"><br><br>
+
+        <button v-on:click="onClick">Submit</button>
+
+        <p v-if="errors" id="color">{{errors}}</p>
+        <p v-if="bearerToken" >{{bearerToken}}</p>
+
+        <!-- <h2 class="results__heading">Form Data</h2>
+        <pre>{{ $data | json 2 }}</pre> -->
+
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+    <script>
+
+        let vm = new Vue ({
+            el: "#password-form",
+
+
+
+            data : {
+                email: "efthimis.vafidis@gmail.com",
+                password: "password",
+                passwordConfirm : "password",
+                errors: [],
+                bearerToken: "",
+                requestInit: {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
+
+                }
+            },
+            methods : {
+                onClick : function (e) {
+
+                    this.errors.length = 0;
+
+                    if (this.password === this.passwordConfirm) {
+
+                        this.fetchData();
+                    }
+                    else
+                        this.bearerToken = ""
+                    this.errors.push("Passwords should match")
+
+                    e.preventDefault();
+                },
+                fetchData : function (){
+                    this.requestInit.body = JSON.stringify({username: this.email,password: this.password});
+                    fetch("http://localhost:8080/login", this.requestInit)
+                        .then((response) => {
+                            return response.headers.get("Authorization")
+                        })
+                        .then((data) => {
+                            this.bearerToken = data
+                            this.errors = ""
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
+                }
+            }
+
+        })
+
+
+
+    </script>
+
+
+</body>
+
+</html>
