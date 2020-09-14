@@ -40,7 +40,7 @@ let vm = new Vue ({
         },
         fetchData : function (){
             this.requestInit.body = JSON.stringify({username: this.email,password: this.password});
-            fetch("http://localhost:8080/login", this.requestInit)
+            fetch("http://http://159.69.147.30:8080/login", this.requestInit)
                 .then((response) => {
                     return response.headers.get("Authorization")
                 })
