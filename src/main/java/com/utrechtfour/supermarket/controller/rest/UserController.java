@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("sign-up")
-    public void signup(@RequestBody ApplicationUser user){
+    public void signup(@RequestBody @Valid ApplicationUser user){
 
         user.setPassword(bcryptPasswordEncoder.encode(user.getPassword()));
         applicationUserRepository.save(user);
