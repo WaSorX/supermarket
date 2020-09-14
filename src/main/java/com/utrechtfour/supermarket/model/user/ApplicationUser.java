@@ -2,6 +2,9 @@ package com.utrechtfour.supermarket.model.user;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 public class ApplicationUser {
@@ -11,6 +14,8 @@ public class ApplicationUser {
     private Long id;
 
     @Email
+    @NotEmpty
+    @Column(unique = true)
     private String username;
     private String password;
 
