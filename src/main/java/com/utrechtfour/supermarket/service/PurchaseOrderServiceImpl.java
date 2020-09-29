@@ -5,6 +5,7 @@ import com.utrechtfour.supermarket.dto.PurchaseOrderItemDTO;
 import com.utrechtfour.supermarket.model.Product;
 import com.utrechtfour.supermarket.model.PurchaseOrder;
 import com.utrechtfour.supermarket.model.PurchaseOrderItem;
+import com.utrechtfour.supermarket.model.PurchaseOrderStatus;
 import com.utrechtfour.supermarket.repository.PurchaseOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
         PurchaseOrder purchaseOrder = new PurchaseOrder();
         purchaseOrder.setSupplier(supplierSevice.getSupplierById(purchaseOrderDto.getSupplierId()).get());
+        purchaseOrder.setPurchaseOrderStatus(PurchaseOrderStatus.OPEN);
         purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
         Set<PurchaseOrderItem> purchaseOrderItems = new HashSet<>();
         for(PurchaseOrderItemDTO purchaseOrderItemDTO: purchaseOrderDto.getPurchaseOrderItemDto()) {
@@ -42,6 +44,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
                 poItem.setProduct(productService.getProductById(purchaseOrderItemDTO.getProductId()).get());
                 poItem.setPurchasePrice(purchaseOrderItemDTO.getPurchasePrice());
                 poItem.setQuantity(purchaseOrderItemDTO.getQuantity());
+                poItem.setOpenQuantity(purchaseOrderItemDTO.getQuantity());
                 poItem.setPurchaseOrder(purchaseOrder);
                 poItem = purchaseOrderItemService.createPurchaseOrderItem(poItem);
                 purchaseOrderItems.add(poItem);
@@ -57,44 +60,48 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
     @Transactional
     public PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderDTO purchaseOrderDTO) throws NoSuchElementException{
-        PurchaseOrder purchaseOrderdb = purchaseOrderRepository.findById(purchaseOrderDTO.getPurchaseOrderId()).get();
+        PurchaseOrder purchaseOrderDb = purchaseOrderRepository.findById(purchaseOrderDTO.getPurchaseOrderId()).get();
+        purchaseOrderDb.setPurchaseOrderStatus(PurchaseOrderStatus.OPEN);
         for (PurchaseOrderItemDTO purchaseOrderItemDTO: purchaseOrderDTO.getPurchaseOrderItemDto()){
             Product product = productService.getProductById(purchaseOrderItemDTO.getProductId()).get();
-            if(!product.getSuppliers().contains(purchaseOrderdb.getSupplier())){
-                throw new NoSuchElementException("supplier with id = " + purchaseOrderdb.getSupplier().getId() + " does not have product " + product.getId());
+            if(!product.getSuppliers().contains(purchaseOrderDb.getSupplier())){
+                throw new NoSuchElementException("supplier with id = " + purchaseOrderDb.getSupplier().getId() + " does not have product " + product.getId());
             } else {
                 PurchaseOrderItem newItem = new PurchaseOrderItem();
                 newItem.setProduct(product);
-                newItem.setPurchaseOrder(purchaseOrderdb);
+                newItem.setPurchaseOrder(purchaseOrderDb);
                 newItem.setQuantity(purchaseOrderItemDTO.getQuantity());
+                newItem.setOpenQuantity(purchaseOrderItemDTO.getQuantity());
                 newItem.setPurchasePrice(purchaseOrderItemDTO.getPurchasePrice());
                 newItem = purchaseOrderItemService.createAndUpdatePurchaseOrderItem(newItem);
-                purchaseOrderdb = addPurchaseOrderItemsToOrder(newItem, purchaseOrderdb);
+                purchaseOrderDb = addPurchaseOrderItemsToOrder(newItem, purchaseOrderDb);
             }
 
         }
-        return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrderdb);
+        return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrderDb);
     }
 
     @Transactional
     @Override
     public PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long purchaseOrderId) throws NoSuchElementException {
 
-        PurchaseOrder purchaseOrderdb = purchaseOrderRepository.findById(purchaseOrderId).get();
+        PurchaseOrder purchaseOrderDb = purchaseOrderRepository.findById(purchaseOrderId).get();
+        purchaseOrderDb.setPurchaseOrderStatus(PurchaseOrderStatus.OPEN);
         Product product  = productService.getProductById(purchaseOrderItemDto.getProductId()).get();
-        if(!product.getSuppliers().contains(purchaseOrderdb.getSupplier())){
-            throw new NoSuchElementException("supplier with id = " + purchaseOrderdb.getSupplier().getId() + " does not have product " + product.getId());
+        if(!product.getSuppliers().contains(purchaseOrderDb.getSupplier())){
+            throw new NoSuchElementException("supplier with id = " + purchaseOrderDb.getSupplier().getId() + " does not have product " + product.getId());
         } else {
 
             PurchaseOrderItem newItem = new PurchaseOrderItem();
             newItem.setProduct(product);
-            newItem.setPurchaseOrder(purchaseOrderdb);
+            newItem.setPurchaseOrder(purchaseOrderDb);
             newItem.setQuantity(purchaseOrderItemDto.getQuantity());
+            newItem.setOpenQuantity(purchaseOrderItemDto.getQuantity());
             newItem.setPurchasePrice(purchaseOrderItemDto.getPurchasePrice());
             newItem = purchaseOrderItemService.createAndUpdatePurchaseOrderItem(newItem);
-            purchaseOrderdb = addPurchaseOrderItemsToOrder(newItem, purchaseOrderdb);
+            purchaseOrderDb = addPurchaseOrderItemsToOrder(newItem, purchaseOrderDb);
         }
-        return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrderdb);
+        return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrderDb);
     }
 
     @Override
