@@ -26,6 +26,9 @@ public class PurchaseOrderItem {
     @Min(1)
     @NotNull
     private Integer quantity;
+    @Min(1)
+    @NotNull
+    private Integer openQuantity;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "purchaseOrder_id")
     private PurchaseOrder purchaseOrder;
@@ -60,6 +63,14 @@ public class PurchaseOrderItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getOpenQuantity() {
+        return openQuantity;
+    }
+
+    public void setOpenQuantity(Integer openQuantity) {
+        this.openQuantity = openQuantity;
     }
 
     public PurchaseOrder getPurchaseOrder() {

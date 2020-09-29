@@ -19,6 +19,8 @@ public class PurchaseOrderDTO {
     @JsonView({RestViews.PurchaseOrderView.class})
     @JsonProperty("purchase_order_item")
     private Set<PurchaseOrderItemDTO> purchaseOrderItemDto;
+    @JsonView({RestViews.PurchaseOrderView.class})
+    private int purchaseOrderStatus;
 
     public Long getPurchaseOrderId() {
         return purchaseOrderId;
@@ -44,11 +46,20 @@ public class PurchaseOrderDTO {
         this.purchaseOrderItemDto = purchaseOrderItemDtos;
     }
 
+    public int getPurchaseOrderStatus() {
+        return purchaseOrderStatus;
+    }
+
+    public void setPurchaseOrderStatus(int purchaseOrderStatus) {
+        this.purchaseOrderStatus = purchaseOrderStatus;
+    }
+
     public static PurchaseOrderDTO convertToPurchaseOrderDto(PurchaseOrder purchaseOrder){
         PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
         purchaseOrderDTO.setPurchaseOrderId(purchaseOrder.getId());
         purchaseOrderDTO.setSupplierId(purchaseOrder.getSupplier().getId());
         purchaseOrderDTO.setPurchaseOrderItemDto(PurchaseOrderItemDTO.convertToDTOSet(purchaseOrder.getPurchaseOrderItems()));
+        purchaseOrderDTO.setPurchaseOrderStatus(purchaseOrder.getPurchaseOrderStatus().getStatusId());
         return purchaseOrderDTO;
     }
 

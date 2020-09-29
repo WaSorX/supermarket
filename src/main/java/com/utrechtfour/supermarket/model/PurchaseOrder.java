@@ -25,6 +25,9 @@ public class PurchaseOrder {
             fetch = FetchType.LAZY)
     @JsonView({RestViews.PurchaseOrderView.class})
     private Set<PurchaseOrderItem> purchaseOrderItem;
+    @JsonView({RestViews.PurchaseOrderView.class})
+    @Enumerated(EnumType.STRING)
+    private PurchaseOrderStatus purchaseOrderStatus;
     @UpdateTimestamp
     private Date updateTime;
     @CreationTimestamp
@@ -68,6 +71,15 @@ public class PurchaseOrder {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+
+    public PurchaseOrderStatus getPurchaseOrderStatus() {
+        return purchaseOrderStatus;
+    }
+
+    public void setPurchaseOrderStatus(PurchaseOrderStatus purchaseOrderStatus) {
+        this.purchaseOrderStatus = purchaseOrderStatus;
     }
 }
 
