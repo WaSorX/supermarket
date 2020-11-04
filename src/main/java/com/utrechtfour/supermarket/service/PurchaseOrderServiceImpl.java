@@ -57,9 +57,18 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
         return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrder);
     }
 
+    @Override
+    public PurchaseOrder updatePurchaseOrder(PurchaseOrder purchaseOrder) {
+        if(purchaseOrderRepository.findById(purchaseOrder.getId()).isEmpty()){
+            throw new NoSuchElementException("Purchase order with id " + purchaseOrder.getId() + " does not exist");
+        }
+
+        return purchaseOrderRepository.save(purchaseOrder);
+    }
+
 
     @Transactional
-    public PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderDTO purchaseOrderDTO) throws NoSuchElementException{
+    public PurchaseOrderDTO addToPurchaseOrder(PurchaseOrderDTO purchaseOrderDTO) throws NoSuchElementException{
         PurchaseOrder purchaseOrderDb = purchaseOrderRepository.findById(purchaseOrderDTO.getPurchaseOrderId()).get();
         purchaseOrderDb.setPurchaseOrderStatus(PurchaseOrderStatus.OPEN);
         for (PurchaseOrderItemDTO purchaseOrderItemDTO: purchaseOrderDTO.getPurchaseOrderItemDto()){
@@ -83,7 +92,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
     @Transactional
     @Override
-    public PurchaseOrderDTO updatePurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long purchaseOrderId) throws NoSuchElementException {
+    public PurchaseOrderDTO addToPurchaseOrder(PurchaseOrderItemDTO purchaseOrderItemDto, Long purchaseOrderId) throws NoSuchElementException {
 
         PurchaseOrder purchaseOrderDb = purchaseOrderRepository.findById(purchaseOrderId).get();
         purchaseOrderDb.setPurchaseOrderStatus(PurchaseOrderStatus.OPEN);
@@ -105,15 +114,20 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     }
 
     @Override
-    public PurchaseOrderDTO getPurchaseOrderById(Long id) {
+    public PurchaseOrderDTO getPurchaseOrderDTOById(Long id) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).get();
         return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrder);
     }
 
-    @Transactional
-    public Optional<PurchaseOrder> getPurchaseOrderById(long id){
-        return purchaseOrderRepository.findById(id);
+    @Override
+    public PurchaseOrder getPurchaseOrderById(Long id) throws NoSuchElementException{
+        if(purchaseOrderRepository.findById(id).isEmpty()){
+            throw new NoSuchElementException("Purchase order with id " + id + " doesn't exist");
+        }
+
+        return purchaseOrderRepository.findById(id).get();
     }
+
 
     @Transactional
     public PurchaseOrder createOrUpdatePurchaseOrder(PurchaseOrder purchaseOrder){

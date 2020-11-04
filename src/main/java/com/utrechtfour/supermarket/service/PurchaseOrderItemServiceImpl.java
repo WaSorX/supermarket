@@ -20,7 +20,7 @@ public class PurchaseOrderItemServiceImpl implements PurchaseOrderItemService{
 
     @Transactional
     @Override
-    public Optional<PurchaseOrderItem> getPurchaseOrderById(long id) {
+    public Optional<PurchaseOrderItem> getPurchaseOrderById(Long id) {
         return purchaseOrderItemRepository.findById(id);
     }
 
@@ -39,7 +39,7 @@ public class PurchaseOrderItemServiceImpl implements PurchaseOrderItemService{
 
     @Transactional
     @Override
-    public void removePurchaseOrderItemById(long id) {
+    public void removePurchaseOrderItemById(Long id) {
         purchaseOrderItemRepository.deleteById(id);
     }
 }
