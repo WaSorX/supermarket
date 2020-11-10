@@ -26,7 +26,7 @@ public class PurchaseOrderItem {
     @Min(1)
     @NotNull
     private Integer quantity;
-    @Min(1)
+    @Min(0)
     @NotNull
     private Integer openQuantity;
     @ManyToOne(cascade = CascadeType.ALL)
@@ -79,5 +79,17 @@ public class PurchaseOrderItem {
 
     public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(!(o instanceof PurchaseOrderItem)) return false;
+        return id!=null &&
+                id.equals(((PurchaseOrderItem) o).getId());
+    }
+    @Override
+    public int hashCode(){
+        return 999;
     }
 }

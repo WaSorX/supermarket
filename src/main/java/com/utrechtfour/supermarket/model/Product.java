@@ -77,6 +77,10 @@ public class Product {
     @JoinTable(name = "purchaseorderitem_product", joinColumns = {@JoinColumn(name = "product_id")}, inverseJoinColumns = {@JoinColumn(name = "purchaseorderitem_id")})
     private Set<PurchaseOrderItem> purchaseOrderItem;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL, CascadeType.MERGE})
+    @JoinTable(name = "stock_item_product", joinColumns = {@JoinColumn(name = "product_id")}, inverseJoinColumns = {@JoinColumn(name = "stock_item_id")})
+    private Set<StockItem> stockItem;
+
     public Product() {}
 
     public Product(@Size(min = 13, max = 13) String barcode, @NotBlank String name, String description, Date creationTime, Date updateTime, @NotNull Category category, @NotNull VatTariff vatTarrif, @NotNull Unit unit, BigDecimal price, @NotNull Brand brand, Set<Supplier> suppliers) {
@@ -207,5 +211,13 @@ public class Product {
 
     public void setPurchaseOrderItem(Set<PurchaseOrderItem> purchaseOrderItem) {
         this.purchaseOrderItem = purchaseOrderItem;
+    }
+
+    public Set<StockItem> getStockItem() {
+        return stockItem;
+    }
+
+    public void setStockItem(Set<StockItem> stockItem) {
+        this.stockItem = stockItem;
     }
 }

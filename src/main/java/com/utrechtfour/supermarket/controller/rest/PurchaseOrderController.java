@@ -1,8 +1,10 @@
 package com.utrechtfour.supermarket.controller.rest;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.utrechtfour.supermarket.dto.ProcessPORequestDTO;
 import com.utrechtfour.supermarket.dto.PurchaseOrderDTO;
 import com.utrechtfour.supermarket.dto.PurchaseOrderItemDTO;
 import com.utrechtfour.supermarket.service.PurchaseOrderService;
+import com.utrechtfour.supermarket.service.StockItemService;
 import com.utrechtfour.supermarket.views.RestViews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ public class PurchaseOrderController {
 
     @Autowired
     private PurchaseOrderService purchaseOrderService;
+    @Autowired
+    private StockItemService stockItemService;
 
     @PostMapping("/purchaseOrder")
     @ResponseStatus(HttpStatus.OK)
@@ -37,8 +41,8 @@ public class PurchaseOrderController {
     @JsonView({RestViews.PurchaseOrderView.class})
     public ResponseEntity getPurchaseOrderById (@PathVariable Long id, HttpServletResponse response){
 
-        if (purchaseOrderService.getPurchaseOrderById(id) != null){
-            return new ResponseEntity(purchaseOrderService.getPurchaseOrderById(id), HttpStatus.OK);
+        if (purchaseOrderService.getPurchaseOrderDTOById(id) != null){
+            return new ResponseEntity(purchaseOrderService.getPurchaseOrderDTOById(id), HttpStatus.OK);
         }
         else
             throw new ValidationException("Cannot find Purchase Order with an id of " + id);
@@ -49,7 +53,7 @@ public class PurchaseOrderController {
     @ResponseStatus(HttpStatus.OK)
     @JsonView({RestViews.PurchaseOrderView.class})
     public ResponseEntity<PurchaseOrderDTO> updatePurchaseOrder(@RequestBody PurchaseOrderItemDTO purchaseOrderItemDto, @PathVariable Long id){
-        return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.updatePurchaseOrder(purchaseOrderItemDto, id),HttpStatus.OK);
+        return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.addToPurchaseOrder(purchaseOrderItemDto, id),HttpStatus.OK);
     }
 
     @PutMapping("/purchaseOrder/")
@@ -57,7 +61,7 @@ public class PurchaseOrderController {
     @JsonView({RestViews.PurchaseOrderView.class})
     public ResponseEntity<PurchaseOrderDTO> updatePurchaseOrder(@RequestBody PurchaseOrderDTO purchaseOrderDTO){
         if (purchaseOrderDTO.getPurchaseOrderId() != null){
-         return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.updatePurchaseOrder(purchaseOrderDTO),HttpStatus.OK);
+         return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.addToPurchaseOrder(purchaseOrderDTO),HttpStatus.OK);
         }
         else
             throw new ValidationException("No purchase order id found");
@@ -81,4 +85,10 @@ public class PurchaseOrderController {
         return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.createPurchaseOrder(purchaseOrderDTO),HttpStatus.OK);
     }
 
+    @PostMapping("/processPurchaseOrder")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<PurchaseOrderDTO> processPurchaseOrder(@RequestBody ProcessPORequestDTO poRequestDTO){
+        stockItemService.processPurchaseOrder(poRequestDTO.getPurchaseOrderId());
+        return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.getPurchaseOrderDTOById(poRequestDTO.getPurchaseOrderId()),HttpStatus.OK);
+    }
 }
