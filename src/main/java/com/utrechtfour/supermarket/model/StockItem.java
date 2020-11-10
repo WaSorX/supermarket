@@ -8,18 +8,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity(name = "stock_item")
-@Table
+@Table(name="stock_item")
 public class StockItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne (cascade = CascadeType.MERGE)
     @JoinColumn(name = "purchaseOrder_id")
     private PurchaseOrder purchaseOrder;
     @CreatedDate
     private Date deliveryDate;
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne (cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id")
     private Product product;
     private Integer supplied;

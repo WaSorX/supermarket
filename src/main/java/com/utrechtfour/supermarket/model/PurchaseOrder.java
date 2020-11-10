@@ -32,6 +32,19 @@ public class PurchaseOrder {
     private Date updateTime;
     @CreationTimestamp
     private Date creationTime;
+    @OneToMany(mappedBy = "purchaseOrder",
+            fetch = FetchType.LAZY)
+    private Set<StockItem> stockItem;
+
+    public Set<PurchaseOrderItem> getPurchaseOrderItem() {
+        return purchaseOrderItem;
+    }
+
+    public void setPurchaseOrderItem(Set<PurchaseOrderItem> purchaseOrderItem) {
+        this.purchaseOrderItem = purchaseOrderItem;
+    }
+
+
 
     public Long getId() {
         return id;
@@ -53,7 +66,7 @@ public class PurchaseOrder {
         return purchaseOrderItem;
     }
 
-    public void setPoItems(Set<PurchaseOrderItem> purchaseOrderItems) {
+    public void setPurchaseOrderItems(Set<PurchaseOrderItem> purchaseOrderItems) {
         this.purchaseOrderItem = purchaseOrderItems;
     }
 
@@ -80,6 +93,24 @@ public class PurchaseOrder {
 
     public void setPurchaseOrderStatus(PurchaseOrderStatus purchaseOrderStatus) {
         this.purchaseOrderStatus = purchaseOrderStatus;
+    }
+
+    public Set<StockItem> getStockItem() {
+        return stockItem;
+    }
+
+    public void setStockItem(Set<StockItem> stockItem) {
+        this.stockItem = stockItem;
+    }
+
+    public void addPurchaseOrderItem(PurchaseOrderItem purchaseOrderItem){
+        this.purchaseOrderItem.add(purchaseOrderItem);
+        purchaseOrderItem.setPurchaseOrder(this);
+    }
+
+    public void removePurchaseOrderItem(PurchaseOrderItem purchaseOrderItem){
+        this.purchaseOrderItem.remove(purchaseOrderItem);
+        purchaseOrderItem.setPurchaseOrder(null);
     }
 }
 

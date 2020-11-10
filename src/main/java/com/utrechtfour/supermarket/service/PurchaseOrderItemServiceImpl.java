@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,7 +28,6 @@ public class PurchaseOrderItemServiceImpl implements PurchaseOrderItemService{
     @Transactional
     @Override
     public PurchaseOrderItem createPurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
-
         return purchaseOrderItemRepository.save(purchaseOrderItem);
     }
 
@@ -41,5 +41,10 @@ public class PurchaseOrderItemServiceImpl implements PurchaseOrderItemService{
     @Override
     public void removePurchaseOrderItemById(Long id) {
         purchaseOrderItemRepository.deleteById(id);
+    }
+
+    @Override
+    public List<PurchaseOrderItem> findPurchaseOrderItemsByPOId(Long purchaseOrderId) {
+        return purchaseOrderItemRepository.findPurchaseOrderItemsByPurchaseOrderId(purchaseOrderId);
     }
 }

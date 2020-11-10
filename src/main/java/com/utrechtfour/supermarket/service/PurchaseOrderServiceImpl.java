@@ -56,10 +56,10 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
         return PurchaseOrderDTO.convertToPurchaseOrderDto(purchaseOrder);
     }
-
+    @Transactional
     @Override
-    public PurchaseOrder updatePurchaseOrder(PurchaseOrder purchaseOrder) {
-        if(purchaseOrderRepository.findById(purchaseOrder.getId()).isEmpty()){
+    public PurchaseOrder updatePurchaseOrder(PurchaseOrder purchaseOrder) throws NoSuchElementException{
+        if(!purchaseOrderRepository.findById(purchaseOrder.getId()).isPresent()){
             throw new NoSuchElementException("Purchase order with id " + purchaseOrder.getId() + " does not exist");
         }
 
@@ -142,7 +142,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     @Transactional
     public PurchaseOrder addPurchaseOrderItemsToOrder(Set<PurchaseOrderItem> items, PurchaseOrder order){
 
-        order.setPoItems(items);
+        order.setPurchaseOrderItems(items);
         return purchaseOrderRepository.save(order);
     }
 

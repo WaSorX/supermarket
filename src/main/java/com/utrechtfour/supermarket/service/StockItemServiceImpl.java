@@ -7,14 +7,16 @@ import com.utrechtfour.supermarket.model.StockItem;
 import com.utrechtfour.supermarket.repository.StockItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
-import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
-@Transactional
 public class StockItemServiceImpl implements StockItemService{
 
     @Autowired
@@ -34,11 +36,12 @@ public class StockItemServiceImpl implements StockItemService{
     public StockItem updateStockItem(StockItem stockItem) {
 
         if (stockItemRepository.findById(stockItem.getId()).isEmpty()) {
-            throw new NoSuchElementException("This stock item with id " + stockItem.getId() + " does noet exist.");
+            throw new NoSuchElementException("This stock item with id " + stockItem.getId() + " does not exist.");
         }
         return stockItemRepository.save(stockItem);
     }
 
+    @Transactional
     @Override
     public void processPurchaseOrder(Long purchaseOrderId) {
 
@@ -47,8 +50,11 @@ public class StockItemServiceImpl implements StockItemService{
         if(!purchaseOrder.getPurchaseOrderStatus().equals(PurchaseOrderStatus.OPEN)){
             throw new ValidationException("Purchase order with id " + purchaseOrder.getId() + " is not open");
         }
+        Set<PurchaseOrderItem> updatedPurchaseOrderItems = new HashSet<>();
+        Set<StockItem> stockItems = new HashSet<>();
+        List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findPurchaseOrderItemsByPOId(purchaseOrderId);
 
-        for (PurchaseOrderItem purchaseOrderItem : purchaseOrder.getPurchaseOrderItems()){
+        for (PurchaseOrderItem purchaseOrderItem : purchaseOrderItems){
             StockItem stockItem = new StockItem();
             stockItem.setPurchaseOrder(purchaseOrderItem.getPurchaseOrder());
             stockItem.setProduct(purchaseOrderItem.getProduct());
@@ -56,19 +62,22 @@ public class StockItemServiceImpl implements StockItemService{
             stockItem.setPurchasePrice(purchaseOrderItem.getPurchasePrice());
             stockItem.setSupplied(purchaseOrderItem.getQuantity());
 
-            purchaseOrderItem.setOpenQuantity(0);
-
-
+            stockItems.add(stockItem);
             stockItemRepository.save(stockItem);
-            purchaseOrderItemService.createAndUpdatePurchaseOrderItem(purchaseOrderItem);
-        }
 
+            purchaseOrderItem.setOpenQuantity(0);
+            purchaseOrderItemService.createAndUpdatePurchaseOrderItem(purchaseOrderItem);
+            updatedPurchaseOrderItems.add(purchaseOrderItem);
+        }
+        purchaseOrder.setPurchaseOrderItems(updatedPurchaseOrderItems);
         purchaseOrder.setPurchaseOrderStatus(PurchaseOrderStatus.FULLY_DELIVERED);
+        purchaseOrder.setStockItem(stockItems);
         purchaseOrderService.updatePurchaseOrder(purchaseOrder);
+
     }
 
     @Override
     public void removeStockItem(Long id) {
-
+        stockItemRepository.deleteById(id);
     }
 }

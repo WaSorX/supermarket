@@ -7,4 +7,5 @@ public class RestViews {
     public static class CategoryView{};
     public static class SupplierView{};
     public static class BrandView{};
+    public static class ProcessPORequestView{};
 }

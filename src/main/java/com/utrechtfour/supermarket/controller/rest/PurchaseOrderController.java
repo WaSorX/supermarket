@@ -1,5 +1,6 @@
 package com.utrechtfour.supermarket.controller.rest;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.utrechtfour.supermarket.dto.ProcessPORequestDTO;
 import com.utrechtfour.supermarket.dto.PurchaseOrderDTO;
 import com.utrechtfour.supermarket.dto.PurchaseOrderItemDTO;
 import com.utrechtfour.supermarket.service.PurchaseOrderService;
@@ -22,6 +23,7 @@ public class PurchaseOrderController {
 
     @Autowired
     private PurchaseOrderService purchaseOrderService;
+    @Autowired
     private StockItemService stockItemService;
 
     @PostMapping("/purchaseOrder")
@@ -83,10 +85,10 @@ public class PurchaseOrderController {
         return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.createPurchaseOrder(purchaseOrderDTO),HttpStatus.OK);
     }
 
-    @PostMapping("/processPurchaseOrder/{purchaseOrderId}")
+    @PostMapping("/processPurchaseOrder")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PurchaseOrderDTO> processPurchaseOrder(@PathVariable Long purchaseOrderId){
-        stockItemService.processPurchaseOrder(purchaseOrderId);
-        return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.getPurchaseOrderDTOById(purchaseOrderId),HttpStatus.OK);
+    public ResponseEntity<PurchaseOrderDTO> processPurchaseOrder(@RequestBody ProcessPORequestDTO poRequestDTO){
+        stockItemService.processPurchaseOrder(poRequestDTO.getPurchaseOrderId());
+        return new ResponseEntity<PurchaseOrderDTO>(purchaseOrderService.getPurchaseOrderDTOById(poRequestDTO.getPurchaseOrderId()),HttpStatus.OK);
     }
 }
